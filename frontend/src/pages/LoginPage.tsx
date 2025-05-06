@@ -1,44 +1,63 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { login } from "../services";
+
+import { loginService } from "../services";
 import { notify } from "../hooks";
+import { useAuth } from "../stores";
+
+import { Input, Layout } from "../components";
 
 export const LoginPage = () => {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const { login } = useAuth();
+
+    const usernameRef = useRef<HTMLInputElement>(null);
+    const passwordRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
 
     async function handleSubmit(e: FormEvent) {
         e.preventDefault();
+
+        const username = usernameRef.current!.value;
+        const password = passwordRef.current!.value;
+
         try {
-            const { token } = await login({ username, password });
-            localStorage.setItem("token", token);
-            navigate("/game");
-        } catch {
+            const loginResponse = await loginService({ username, password });
+            login(loginResponse);
+            localStorage.setItem("token", loginResponse.token);
+            navigate("/");
+        } catch(err) {
             notify("Nome de usuário ou senha incorretos.").error();
         }
     }
 
     return (
-        <form onSubmit={handleSubmit} className="max-w-sm m-auto mt-10 space-y-4">
-            <h1 className="text-xl font-bold">Login</h1>
-            <input
-                type="text"
-                placeholder="Nome de Usuário"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="border p-2 w-full"
-            />
-            <input
-                type="password"
-                placeholder="Senha"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="border p-2 w-full"
-            />
-            <button type="submit" className="bg-blue-500 text-white p-2 w-full">
-                Entrar
-            </button>
-        </form>
+        <Layout>
+            <form
+                onSubmit={handleSubmit}
+                className="max-w-xl m-auto mt-10 space-y-4
+                border-2 rounded-lg px-20 py-12 shadow-lg
+                shadow-indigo-900 backdrop-blur-lg"
+            >
+                <h1 className="text-3xl font-bold text-white text-center border-b pb-2">Login</h1>
+                <Input
+                    type="text"
+                    placeholder="Nome de Usuário"
+                    forwardedRef={usernameRef}
+                />
+                <Input
+                    type="password"
+                    placeholder="Senha"
+                    forwardedRef={passwordRef}
+                />
+                <button
+                    type="submit"
+                    className="bg-amber-500 text-white p-2 w-full
+                    cursor-pointer rounded hover:bg-amber-600
+                    transition-colors ease-linear"
+                >
+                    Entrar
+                </button>
+            </form>
+        </Layout>
     )
 }
