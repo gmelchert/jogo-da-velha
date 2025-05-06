@@ -1,9 +1,19 @@
+import { useNavigate } from "react-router-dom";
 import { API_URL } from "../constants";
 
 const checkIfEndpointStartsWithBar = (str: string) =>
     str.startsWith("/")
         ? str
         : `/${str}`;
+
+const errorMessageHandling = (msg: string) => {
+    const navigate = useNavigate();
+    if (msg === 'Token não fornecido' || msg === 'Token inválido') {
+        navigate('/login');
+        throw 'Usuário não autenticado. Por favor faça o login.';
+    }
+    throw msg;
+}
 
 export const api = <R>(endpoint: string) => {
     const url = API_URL + checkIfEndpointStartsWithBar(endpoint)
@@ -24,7 +34,11 @@ export const api = <R>(endpoint: string) => {
         async get(): Promise<R> {
             init.method = "GET";
             const res = await fetch(url, init);
-            if (!res.ok) throw new Error("Erro ao chamar API.");
+
+            if (!res.ok) {
+                const msg = await res.text();
+                return errorMessageHandling(msg);
+            }
 
             return res.json();
         },
@@ -33,7 +47,10 @@ export const api = <R>(endpoint: string) => {
             if (body) init.body = JSON.stringify(body);
 
             const res = await fetch(url, init);
-            if (!res.ok) throw new Error("Erro ao chamar API.");
+            if (!res.ok) {
+                const msg = await res.text();
+                return errorMessageHandling(msg);
+            }
 
             return res.json();
         },
@@ -42,7 +59,10 @@ export const api = <R>(endpoint: string) => {
             if (body) init.body = JSON.stringify(body);
 
             const res = await fetch(url, init);
-            if (!res.ok) throw new Error("Erro ao chamar API.");
+            if (!res.ok) {
+                const msg = await res.text();
+                return errorMessageHandling(msg);
+            }
 
             return res.json();
         },
@@ -50,7 +70,10 @@ export const api = <R>(endpoint: string) => {
             init.method = "DELETE";
 
             const res = await fetch(url, init);
-            if (!res.ok) throw new Error("Erro ao chamar API.");
+            if (!res.ok) {
+                const msg = await res.text();
+                return errorMessageHandling(msg);
+            }
 
             return res.json();
         },
