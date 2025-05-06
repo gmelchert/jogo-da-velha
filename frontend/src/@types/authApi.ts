@@ -5,6 +5,8 @@ export interface ILoginBody {
 
 export interface ILoginResponse {
     token: string;
+    name: string;
+    id: string;
 }
 
 export interface IRegisterBody {
