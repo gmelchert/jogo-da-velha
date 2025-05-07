@@ -1,18 +1,34 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { register } from "../services";
-import { notify } from "../hooks";
+
+import { AuthService } from "@/services";
+import { notify } from "@/hooks";
+import { useAuth } from "@/stores";
+
+import { Input, Layout } from "@/components";
 
 export const RegisterPage = () => {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const { login } = useAuth();
+    
+    const usernameRef = useRef<HTMLInputElement>(null);
+    const passwordRef = useRef<HTMLInputElement>(null);
+    const confirmPasswordRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
 
     async function handleSubmit(e: FormEvent) {
         e.preventDefault();
+        
+        const username = usernameRef.current!.value;
+        const password = passwordRef.current!.value;
+        const confirmPassword = confirmPasswordRef.current!.value;
+
+        if (password !== confirmPassword) return notify('As senhas não são iguais.').error();
+
         try {
-            const { token } = await register({ username, password });
-            localStorage.setItem("token", token);
+            const registerResponse = await AuthService.register({ username, password });
+            login(registerResponse);
+            
+            localStorage.setItem("token", registerResponse.token);
             navigate("/game");
         } catch {
             notify("Erro ao cadastrar.").error();
@@ -20,25 +36,38 @@ export const RegisterPage = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="max-w-sm m-auto mt-10 space-y-4">
-            <h1 className="text-xl font-bold">Cadastro</h1>
-            <input
-                type="text"
-                placeholder="Nome de Usuário"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="border p-2 w-full"
-            />
-            <input
-                type="password"
-                placeholder="Senha"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="border p-2 w-full"
-            />
-            <button type="submit" className="bg-green-500 text-white p-2 w-full">
-                Cadastrar
-            </button>
-        </form>
+        <Layout>
+            <form
+                onSubmit={handleSubmit}
+                className="max-w-xl m-auto mt-10 space-y-4
+                border-2 rounded-lg px-20 py-12 shadow-lg
+                shadow-indigo-900 backdrop-blur-lg"
+            >
+                <h1 className="text-3xl font-bold text-white text-center border-b pb-2">Registrar</h1>
+                <Input
+                    type="text"
+                    placeholder="Nome de Usuário"
+                    forwardedRef={usernameRef}
+                />
+                <Input
+                    type="password"
+                    placeholder="Senha"
+                    forwardedRef={passwordRef}
+                />
+                <Input
+                    type="password"
+                    placeholder="Confirme sua senha"
+                    forwardedRef={passwordRef}
+                />
+                <button
+                    type="submit"
+                    className="bg-amber-500 text-white p-2 w-full
+                    cursor-pointer rounded hover:bg-amber-600
+                    transition-colors ease-linear"
+                >
+                    Cadastrar
+                </button>
+            </form>
+        </Layout>
     )
 }
