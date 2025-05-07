@@ -31,7 +31,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(map[string]string{"token": token})
+	json.NewEncoder(w).Encode(map[string]any{"token": token, "username": user.Username, "id": user.ID})
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
@@ -54,7 +54,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	json.NewEncoder(w).Encode(map[string]any{"token": token, "name": user.Username, "id": user.ID})
+	json.NewEncoder(w).Encode(map[string]any{"token": token, "username": user.Username, "id": user.ID})
 }
 
 func Me(w http.ResponseWriter, r *http.Request) {
