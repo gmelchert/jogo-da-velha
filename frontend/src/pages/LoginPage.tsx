@@ -1,11 +1,11 @@
 import { FormEvent, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { loginService } from "../services";
-import { notify } from "../hooks";
-import { useAuth } from "../stores";
+import { loginService } from "@/services";
+import { notify } from "@/hooks";
+import { useAuth } from "@/stores";
 
-import { Input, Layout } from "../components";
+import { Input, Layout } from "@/components";
 
 export const LoginPage = () => {
     const { login } = useAuth();
