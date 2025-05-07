@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { API_URL } from "../constants";
+import { API_URL } from "@/constants";
 
 const checkIfEndpointStartsWithBar = (str: string) =>
     str.startsWith("/")
