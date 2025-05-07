@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { useAuth } from "../stores"
+import { useAuth } from "@/stores"
 
 export const Header = () => {
     const { logged, user, logout } = useAuth();
@@ -39,7 +39,12 @@ export const Header = () => {
                             className={listItemClassNameBuilder('/stats')}
                         >Estatísticas</a>
                     </li>
-                    {logged && <li><a href={`/history/${user.id}`}>Histórico</a></li>}
+                    {logged && <li>
+                        <a
+                            href={`/history/${user.id}`}
+                            className={listItemClassNameBuilder(`/history/${user.id}`)}
+                        >Histórico</a>
+                    </li>}
                 </ul>
 
                 <div className="ml-4 flex gap-4 items-center">
@@ -48,7 +53,7 @@ export const Header = () => {
                             onClick={logout}
                             className="bg-amber-500 text-white rounded-md
                             py-1 w-20 hover:bg-amber-600 text-center
-                            transition-colors ease-linear"
+                            transition-colors ease-linear cursor-pointer"
                         >
                             Logout
                         </button>
