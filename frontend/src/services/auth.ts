@@ -8,11 +8,16 @@ import {
     IRegisterResponse,
 } from "@/@types";
 
-export const loginService = async (loginBody: ILoginBody) =>
-    api<ILoginResponse>('login').post<ILoginBody>(loginBody);
+export class AuthService {
+    public static async login(loginBody: ILoginBody) {
+        return api<ILoginResponse>('login').post<ILoginBody>(loginBody);
+    }
 
-export const registerService = async (registerBody: IRegisterBody) =>
-    api<IRegisterResponse>('login').post<IRegisterBody>(registerBody);
+    public static async register(registerBody: IRegisterBody) {
+        return api<IRegisterResponse>('login').post<IRegisterBody>(registerBody);
+    }
 
-export const getAuthenticatedUserService = async () =>
-    api<IMeResponse>('me').get();
+    public static async getAuthenticatedUser() {
+        return api<IMeResponse>('api/auth/me').get();
+    }
+}

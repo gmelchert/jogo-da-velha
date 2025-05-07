@@ -1,7 +1,7 @@
 import { FormEvent, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { loginService } from "@/services";
+import { AuthService } from "@/services";
 import { notify } from "@/hooks";
 import { useAuth } from "@/stores";
 
@@ -21,7 +21,7 @@ export const LoginPage = () => {
         const password = passwordRef.current!.value;
 
         try {
-            const loginResponse = await loginService({ username, password });
+            const loginResponse = await AuthService.login({ username, password });
             login(loginResponse);
             localStorage.setItem("token", loginResponse.token);
             navigate("/");
