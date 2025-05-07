@@ -1,10 +1,6 @@
 import { create } from "zustand";
 
-interface UserI {
-    name: string;
-    id: string;
-    token: string;
-}
+import { UserI } from "@/@types";
 
 interface AuthStoreI {
     user: UserI;
@@ -14,8 +10,11 @@ interface AuthStoreI {
 }
 
 export const useAuth = create<AuthStoreI>(set => ({
-    user: { name: "", id: "" ,token: "" },
+    user: { username: "", id: "" ,token: "" },
     logged: false,
     login: (user: UserI) => set(() => ({ user, logged: true })),
-    logout: () => set(() => ({ user: { name: "", id: "", token: "" }, logged: false })),
+    logout: () => {
+        localStorage.removeItem("token");
+        set(() => ({ user: { username: "", id: "", token: "" }, logged: false }))
+    },
 }))
