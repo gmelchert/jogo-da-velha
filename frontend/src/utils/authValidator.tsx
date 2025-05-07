@@ -1,9 +1,9 @@
 import { AuthService } from "@/services";
-import { UserI } from "@/@types";
+import { IUser } from "@/@types";
 
 interface IAuthValidatorProps {
     logged: boolean;
-    login: (user: UserI) => void;
+    login: (user: IUser) => void;
     logout: () => void;
 }
 

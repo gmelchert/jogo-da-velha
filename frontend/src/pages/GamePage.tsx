@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 
-import { connectToChannel } from "../websocket";
-import { notify } from "../hooks";
-import { Board } from "../components";
+import { connectToChannel } from "@/websocket";
+import { notify } from "@/hooks";
+import { Board } from "@/components";
 
 interface Message {
     type: string;

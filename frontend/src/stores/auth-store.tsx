@@ -1,18 +1,18 @@
 import { create } from "zustand";
 
-import { UserI } from "@/@types";
+import { IUser } from "@/@types";
 
 interface AuthStoreI {
-    user: UserI;
+    user: IUser;
     logged: boolean;
-    login: (user: UserI) => void;
+    login: (user: IUser) => void;
     logout: () => void;
 }
 
 export const useAuth = create<AuthStoreI>(set => ({
     user: { username: "", id: "" ,token: "" },
     logged: false,
-    login: (user: UserI) => set(() => ({ user, logged: true })),
+    login: (user: IUser) => set(() => ({ user, logged: true })),
     logout: () => {
         localStorage.removeItem("token");
         set(() => ({ user: { username: "", id: "", token: "" }, logged: false }))

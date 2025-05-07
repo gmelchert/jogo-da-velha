@@ -10,7 +10,7 @@ export const Layout = ({ children }: LayoutProps) => {
         <main className="flex flex-col h-screen bg-violet-950">
             <Header />
 
-            <div>
+            <div className="p-4">
                 {children}
             </div>
         </main>

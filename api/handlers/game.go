@@ -6,7 +6,6 @@ import (
 
 	"github.com/gmelchert/jogo-da-velha/api/utils"
 	"github.com/gmelchert/jogo-da-velha/api/ws"
-	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
 )
 
@@ -15,7 +14,7 @@ var upgrader = websocket.Upgrader{
 }
 
 func WebSocketHandler(w http.ResponseWriter, r *http.Request) {
-	channelID := mux.Vars(r)["channelID"]
+	// channelID := mux.Vars(r)["channelID"]
 
 	token := r.URL.Query().Get("token")
 	if token == "" {

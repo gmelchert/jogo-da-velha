@@ -14,8 +14,8 @@ export const HomePage = () => {
     return (
         <Layout>
             <h1
-                className="mx-auto text-white text-5xl mt-4 border-b-2 w-fit pb-2
-                border-amber-500"
+                className="mx-auto text-white text-5xl
+                border-amber-500 w-fit pb-2 border-b-2"
             >
                 <WelcomeMessage username={user.username} />
             </h1>

@@ -1,5 +1,6 @@
 export * from './Board';
 export * from './Header';
 export * from './Layout';
-export * from './InputText';
+export * from './Input';
+export * from './Button';
 export * from './WelcomeMessage';

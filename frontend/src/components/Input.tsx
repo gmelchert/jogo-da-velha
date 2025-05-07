@@ -10,7 +10,6 @@ export const Input = ({ forwardedRef, ...props}: InputText) => {
     focus:border-amber-500 focus:outline-none focus:ring-0`;
 
     const className = props.className ? `${baseClass} ${props.className}` : baseClass;
-
     delete props.className;
 
     return (

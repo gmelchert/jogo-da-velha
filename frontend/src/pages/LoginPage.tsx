@@ -34,7 +34,7 @@ export const LoginPage = () => {
         <Layout>
             <form
                 onSubmit={handleSubmit}
-                className="max-w-xl m-auto mt-10 space-y-4
+                className="max-w-xl m-auto mt-6 space-y-4
                 border-2 rounded-lg px-20 py-12 shadow-lg
                 shadow-indigo-900 backdrop-blur-lg"
             >
