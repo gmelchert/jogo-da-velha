@@ -21,9 +21,10 @@ export const LoginPage = () => {
         const password = passwordRef.current!.value;
 
         try {
-            const loginResponse = await AuthService.login({ username, password });
-            login(loginResponse);
-            localStorage.setItem("token", loginResponse.token);
+            const { data } = await AuthService.login({ username, password });
+            const { id, token } = data;
+            login({ id, token, username });
+            localStorage.setItem("token", token);
             navigate("/");
         } catch(err) {
             notify("Nome de usuário ou senha incorretos.").error();
