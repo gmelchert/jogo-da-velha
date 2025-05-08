@@ -8,6 +8,7 @@ interface Owner extends IStats {
 
 export interface IRooms {
     id: string;
-    status: ROOM_STATUS;
     owner: Owner;
+    roomId: string;
+    status: ROOM_STATUS;
 }
