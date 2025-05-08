@@ -11,6 +11,7 @@ export const RegisterPage = () => {
     const { login } = useAuth();
     
     const usernameRef = useRef<HTMLInputElement>(null);
+    const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
     const confirmPasswordRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
@@ -19,17 +20,22 @@ export const RegisterPage = () => {
         e.preventDefault();
         
         const username = usernameRef.current!.value;
+        const email = emailRef.current!.value;
         const password = passwordRef.current!.value;
         const confirmPassword = confirmPasswordRef.current!.value;
 
         if (password !== confirmPassword) return notify('As senhas não são iguais.').error();
 
         try {
-            const registerResponse = await AuthService.register({ username, password });
-            login(registerResponse);
+            const { data } = await AuthService.register({ username, password, email });
+            login({
+                id: data.id,
+                token: data.token,
+                username: data.username
+            });
             
-            localStorage.setItem("token", registerResponse.token);
-            navigate("/game");
+            localStorage.setItem("token", data.token);
+            navigate("/");
         } catch {
             notify("Erro ao cadastrar.").error();
         }
@@ -50,6 +56,11 @@ export const RegisterPage = () => {
                     forwardedRef={usernameRef}
                 />
                 <Input
+                    type="email"
+                    placeholder="Email"
+                    forwardedRef={emailRef}
+                />
+                <Input
                     type="password"
                     placeholder="Senha"
                     forwardedRef={passwordRef}
@@ -57,7 +68,7 @@ export const RegisterPage = () => {
                 <Input
                     type="password"
                     placeholder="Confirme sua senha"
-                    forwardedRef={passwordRef}
+                    forwardedRef={confirmPasswordRef}
                 />
                 <button
                     type="submit"
