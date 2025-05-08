@@ -10,7 +10,7 @@ func initializeAuthRoutes(router *gin.Engine) {
 	public := router.Group("/")
 
 	public.POST("/login", handlers.Login)
-	public.POST("/register", handlers.Login)
+	public.POST("/register", handlers.SingUp)
 
 	auth := router.Group("/api/v1")
 	auth.Use(middleware.JWTMiddleware())

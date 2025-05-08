@@ -1,6 +1,8 @@
-package models
+package validator
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type LoginRequest struct {
 	Username string `json:"username"`
@@ -11,11 +13,6 @@ type SignUpRequest struct {
 	Username string `json:"username"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
-}
-
-func errParamIsRequired(name, typ string) error {
-	fmt.Println("Entrou no erro")
-	return fmt.Errorf("param: %s (type: %s) is required", name, typ)
 }
 
 func (r *LoginRequest) ValidateLogin() error {

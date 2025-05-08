@@ -1,21 +1,22 @@
 package main
 
 import (
-	"log"
-	"net/http"
-
-	"github.com/gmelchert/jogo-da-velha/api/database"
-	"github.com/gmelchert/jogo-da-velha/api/middleware"
+	"github.com/gmelchert/jogo-da-velha/api/config"
 	"github.com/gmelchert/jogo-da-velha/api/routes"
 )
 
+var (
+	logger config.Logger
+)
+
 func main() {
-	database.InitDB()
+	logger = *config.GetLogger("main")
 
-	r := routes.SetupRoutes()
+	err := config.Init()
+	if err != nil {
+		logger.Errorf("config initialization error: %v", err)
+		return
+	}
 
-	handler := middleware.CORSMiddleware(r)
-
-	log.Println("Servidor rodando => http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", handler))
+	routes.Initialize()
 }

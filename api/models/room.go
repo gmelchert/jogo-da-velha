@@ -8,10 +8,10 @@ import (
 
 type Room struct {
 	gorm.Model
-	ID         string    `json:"id"`
-	OwnerID    int       `json:"userID"`
+	RoomID     string    `json:"roomId"`
+	OwnerID    uint      `json:"userID"`
 	Owner      User      `json:"owner" gorm:"foreingKey:UserID"`
-	OpponentID int       `json:"opponentID"`
+	OpponentID uint      `json:"opponentID"`
 	Opponent   User      `json:"opponent" gorm:"foreingKey:OpponentID"`
 	CreatedAt  time.Time `json:"createdAt"`
 }
