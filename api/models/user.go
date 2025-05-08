@@ -8,8 +8,8 @@ import (
 
 type User struct {
 	gorm.Model
-	Username string `json:"username"`
-	Email    string `json:"email"`
+	Username string `json:"username" gorm:"uniqueIndex"`
+	Email    string `json:"email" gorm:"uniqueIndex"`
 	Password string `json:"password"`
 }
 

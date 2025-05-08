@@ -8,7 +8,7 @@ import (
 
 var jwtKey = []byte("ANSNngauauie124y!#$$iwd")
 
-func GenerateJWT(userID int) (string, error) {
+func GenerateJWT(userID uint) (string, error) {
 	claims := jwt.MapClaims{
 		"user_id": userID,
 		"exp":     time.Now().Add(time.Hour * 24).Unix(),
