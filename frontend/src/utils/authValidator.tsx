@@ -15,11 +15,15 @@ export const authValidator = async ({
     logged,
 }: IAuthValidatorProps): Promise<boolean> => {
     const token = localStorage.getItem("token");
-    if (!token) return false;
+    if (logged || !token) return false;
 
     try {
-        const user = await AuthService.getAuthenticatedUser();
-        login({ token, ...user });
+        const { data } = await AuthService.getAuthenticatedUser();
+        login({
+            id: data.id,
+            token: token,
+            username: data.username,
+        })
         return true;
     } catch {
         (logged) && logout();
