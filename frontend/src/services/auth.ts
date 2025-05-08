@@ -14,10 +14,10 @@ export class AuthService {
     }
 
     public static async register(registerBody: IRegisterBody) {
-        return api<IRegisterResponse>('login').post<IRegisterBody>(registerBody);
+        return api<IRegisterResponse>('register').post<IRegisterBody>(registerBody);
     }
 
     public static async getAuthenticatedUser() {
-        return api<IMeResponse>('api/auth/me').get();
+        return api<IMeResponse>('api/v1/me').get();
     }
 }
