@@ -15,6 +15,7 @@ func Initialize() {
 	repository.InitializeRepository()
 
 	initializeAuthRoutes(r)
+	initializeRoomRoutes(r)
 
 	r.Run(":8080")
 }

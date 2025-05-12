@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type Stats struct {
 	gorm.Model
-	UserID      int    `json:"userID"`
+	UserID      uint   `json:"userId"`
 	GamesPlayed uint16 `json:"gamesPlayed"`
 	Wins        uint16 `json:"wins"`
 	Draws       uint16 `json:"draws"`

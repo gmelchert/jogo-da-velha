@@ -31,6 +31,13 @@ func FindRoom(ctx *gin.Context) {
 }
 
 func CreateRoom(ctx *gin.Context) {
+	userID, exists := ctx.Get("userID")
+	if !exists {
+		Logger.Errorf("user unauthneticated error")
+		SendError(ctx, http.StatusUnauthorized, "Usuário não autenticado")
+		return
+	}
+
 	request := validator.CreateRoomRequest{}
 	if err := ctx.ShouldBindJSON(&request); err != nil {
 		Logger.Errorf("error binding request: %v", err.Error())
@@ -44,7 +51,12 @@ func CreateRoom(ctx *gin.Context) {
 		return
 	}
 
-	room, createErr := repository.CreateRoom(&request)
+	payload := validator.CreateRoomPayload{
+		OwnerID:    userID.(uint),
+		OpponentID: 0,
+		Status:     "waiting",
+	}
+	room, createErr := repository.CreateRoom(&payload)
 
 	if createErr != nil {
 		Logger.Errorf("error creating room: %v", createErr.Error())
@@ -53,4 +65,32 @@ func CreateRoom(ctx *gin.Context) {
 	}
 
 	SendSuccess(ctx, "create-room", http.StatusCreated, room)
+}
+
+func JoinRoom(ctx *gin.Context) {
+	userID, exists := ctx.Get("userID")
+	if !exists {
+		Logger.Errorf("user unauthneticated error")
+		SendError(ctx, http.StatusUnauthorized, "Usuário não autenticado")
+		return
+	}
+
+	roomID := ctx.Param("id")
+
+	if roomID == "" {
+		Logger.Errorf("room id is required")
+		SendError(ctx, http.StatusBadRequest, "room id is required")
+		return
+	}
+
+	if err := repository.JoinRoom(roomID, userID.(uint)); err != nil {
+		Logger.Errorf("error joining room: %v", err.Error())
+		SendError(ctx, http.StatusInternalServerError, "Erro ao entrar na sala")
+		return
+	}
+
+	// Disparar evento WS para notificar o jogador que entrou na sala
+	// Disparar evento WS para notificar o jogador que criou a sala
+
+	SendSuccess(ctx, "join-room", http.StatusOK, map[string]string{"message": "Você entrou na sala"})
 }

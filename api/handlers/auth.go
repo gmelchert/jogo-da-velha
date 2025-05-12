@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
@@ -117,8 +116,6 @@ func Me(ctx *gin.Context) {
 		SendError(ctx, http.StatusUnauthorized, "Usuário não autenticado")
 		return
 	}
-
-	fmt.Printf("Tipo real: %T\n", userID)
 
 	user, err := repository.FindUserByID(userID.(uint))
 	if err != nil {

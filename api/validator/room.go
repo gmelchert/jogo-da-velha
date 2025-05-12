@@ -10,12 +10,23 @@ type FindRoomQuery struct {
 	OpponentID *uint    `form:"opponentID"`
 	Page       *float64 `form:"page"`
 	Limit      *float64 `form:"limit"`
+	Status     string   `json:"status"`
 }
 
-type CreateRoomRequest struct {
+type CreateRoomPayload struct {
 	RoomID     string `json:"roomId"`
 	OwnerID    uint   `json:"ownerId"`
 	OpponentID uint   `json:"opponentId"`
+	Status     string `json:"status"`
+}
+
+type CreateRoomRequest struct {
+	RoomID string `json:"roomId"`
+}
+
+type UpdateRoomRequest struct {
+	ID     string `json:"id"`
+	Status string `json:"status"`
 }
 
 func (r *CreateRoomRequest) ValidateCreate() error {
@@ -24,12 +35,6 @@ func (r *CreateRoomRequest) ValidateCreate() error {
 	}
 	if r.RoomID == "" {
 		return errParamIsRequired("roomId", "string")
-	}
-	if r.OwnerID == 0 {
-		return errParamIsRequired("ownerId", "uint")
-	}
-	if r.OpponentID == 0 {
-		return errParamIsRequired("opponentId", "uint")
 	}
 
 	return nil

@@ -1,8 +1,6 @@
 package repository
 
 import (
-	"fmt"
-
 	"github.com/gmelchert/jogo-da-velha/api/models"
 	"github.com/gmelchert/jogo-da-velha/api/validator"
 )
@@ -21,8 +19,6 @@ func FindUserByID(id uint) (models.User, error) {
 	if err := Db.First(&user, id).Error; err != nil {
 		return user, err
 	}
-
-	fmt.Println("User found:", user)
 
 	return user, nil
 }
