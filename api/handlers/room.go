@@ -54,7 +54,7 @@ func CreateRoom(ctx *gin.Context) {
 	payload := validator.CreateRoomPayload{
 		OwnerID:    userID.(uint),
 		OpponentID: 0,
-		Status:     "waiting",
+		Status:     "OPEN",
 	}
 	room, createErr := repository.CreateRoom(&payload)
 
