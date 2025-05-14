@@ -63,6 +63,7 @@ func CreateRoom(req *validator.CreateRoomPayload) (models.Room, error) {
 		RoomID:     req.RoomID,
 		OwnerID:    req.OwnerID,
 		OpponentID: 0,
+		Status:     req.Status,
 	}
 
 	if err := Db.Create(&room).Error; err != nil {
@@ -95,7 +96,18 @@ func DeleteRoom(roomID string) error {
 }
 
 func JoinRoom(roomID string, opponentID uint) error {
-	result := Db.Model(&models.Room{}).Where("room_id = ?", roomID).Updates(map[string]interface{}{"opponent_id": opponentID, "status": "playing"})
+	result := Db.Model(&models.Room{}).Where("room_id = ?", roomID).Updates(map[string]interface{}{"opponent_id": opponentID, "status": "RUNNING"})
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return fmt.Errorf("no rows updated")
+	}
+	return nil
+}
+
+func CloseRoom(roomID string) error {
+	result := Db.Model(&models.Room{}).Where("room_id = ?", roomID).Updates(map[string]string{"status": "CLOSED"})
 	if result.Error != nil {
 		return result.Error
 	}
