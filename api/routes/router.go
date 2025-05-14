@@ -9,6 +9,7 @@ import (
 
 func Initialize() {
 	r := gin.Default()
+
 	r.Use(middleware.CORSMiddleware())
 
 	handlers.InitializeHandler()
@@ -17,5 +18,5 @@ func Initialize() {
 	initializeAuthRoutes(r)
 	initializeRoomRoutes(r)
 
-	r.Run(":8080")
+	r.Run(":3000")
 }

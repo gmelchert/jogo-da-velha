@@ -8,9 +8,11 @@ import (
 
 func initializeRoomRoutes(router *gin.Engine) {
 	r := router.Group("/api/v1/rooms")
+
 	r.Use(middleware.JWTMiddleware())
 
-	r.GET("/", handlers.FindRoom)
-	r.POST("/", handlers.CreateRoom)
+	r.GET("", handlers.FindRoom)
+	r.POST("", handlers.CreateRoom)
 	r.POST("join/:id", handlers.JoinRoom)
+	r.DELETE("close/:id", handlers.CloseRoom)
 }

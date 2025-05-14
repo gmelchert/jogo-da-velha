@@ -1,4 +1,4 @@
-import { IAPIResponse } from './'
+import { IAPIResponse } from '.'
 
 export interface ILoginBody {
     username: string;

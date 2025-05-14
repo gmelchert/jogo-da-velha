@@ -112,7 +112,7 @@ func Login(ctx *gin.Context) {
 func Me(ctx *gin.Context) {
 	userID, exists := ctx.Get("userID")
 	if !exists {
-		Logger.Errorf("user unauthneticated error")
+		Logger.Errorf("user unauthenticated error")
 		SendError(ctx, http.StatusUnauthorized, "Usuário não autenticado")
 		return
 	}

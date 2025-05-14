@@ -1,11 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "@/constants";
 
-const checkIfEndpointStartsWithBar = (str: string) =>
-    str.startsWith("/")
-        ? str
-        : `/${str}`;
-
 const errorMessageHandling = (msg: string) => {
     const navigate = useNavigate();
     if (msg === 'Token não fornecido' || msg === 'Token inválido') {
@@ -16,7 +11,7 @@ const errorMessageHandling = (msg: string) => {
 }
 
 export const api = <R>(endpoint: string) => {
-    const url = API_URL + checkIfEndpointStartsWithBar(endpoint)
+    const url = API_URL + endpoint
 
     const token = localStorage.getItem("token");
 
@@ -25,6 +20,7 @@ export const api = <R>(endpoint: string) => {
     })
     
     token && headers.append("Authorization", `Bearer ${token}`);
+    // token && headers.append("credentials", "include");
 
     const init: RequestInit = {
         headers,

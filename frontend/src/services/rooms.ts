@@ -1,29 +1,24 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { IRooms } from "@/@types";
-import { ROOM_STATUS } from '@/enums';
-// import { api } from "@/utils";
+import { api, queryParamBuilder } from "@/utils";
+// import { ROOM_STATUS } from '@/enums';
+import { API_V1_ROOT } from '@/constants';
+
+import {
+    ICreateRoom,
+    IFindRoomQuery,
+    IFindRoomResponse,
+    ICreateRoomResponse,
+} from "@/@types";
 
 export class RoomsService {
-    public static async getAllRooms() {
-        const rooms: IRooms[] = [
-            {
-                id: uuidv4(),
-                status: ROOM_STATUS.OPEN,
-                owner: {
-                    draws: 12,
-                    gamesPlayed: 26,
-                    losses: 4,
-                    wins: 10,
-                    userId: 1,
-                    user: {
-                        id: "1",
-                        username: 'Fulano',
-                    }
-                }
-            }
-        ];
-        return rooms;
-        // return api<IRooms[]>('').get();
+    public static async findRooms(query: IFindRoomQuery) {
+        const queryUrl = queryParamBuilder(query);
+        return api<IFindRoomResponse>(`/${API_V1_ROOT}/rooms?${queryUrl}`).get();
+    }
+
+    public static async createRoom() {
+        const roomId = uuidv4();
+        return api<ICreateRoomResponse>(`/${API_V1_ROOT}/rooms`).post<ICreateRoom>({ roomId });
     }
 }

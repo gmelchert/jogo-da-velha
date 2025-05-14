@@ -1,10 +1,55 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { Button, Layout } from "@/components";
+import { notify } from "@/hooks";
+import { useAuth } from "@/stores";
+import { ROOM_STATUS } from "@/enums";
+import { authValidator } from "@/utils";
+import { RoomsService } from "@/services";
+import { Button, Layout, Loading } from "@/components";
+
 import { IRooms } from "@/@types";
 
 export const RoomsPage = () => {
     const [rooms, setRooms] = useState<IRooms[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [page, setPage] = useState<number>(1);
+
+    const navigate = useNavigate();
+    const { logged, login, logout } = useAuth();
+
+    const fetchRooms = async (page: number) => {
+        setLoading(true);
+        try {
+            const { data } = await RoomsService.findRooms({
+                status: ROOM_STATUS.OPEN,
+                limit: 20,
+                page,
+            });
+            setRooms(data.rows);
+        } catch (error) {
+            console.error("Error fetching rooms:", error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const onCreateRoomClick = async () => {
+        try {
+            const { data } = await RoomsService.createRoom();
+            navigate(`/game/${data.roomId}`);
+        } catch (error) {
+            notify("Erro ao criar sala.").error();
+        }
+    }
+
+    useEffect(() => {
+        fetchRooms(page);
+    }, [page]);
+    
+    useEffect(() => {
+        authValidator({ logged, login, logout });
+    }, []);
 
     return (
         <Layout>
@@ -16,7 +61,10 @@ export const RoomsPage = () => {
                     Salas disponíveis: <span className="text-amber-500">{rooms.length}</span>
                 </h1>
                 
-                <Button className="absolute top-1.5 right-4 w-32 py-2">Criar Sala</Button>
+                <Button
+                    className="absolute top-1.5 right-4 w-32 py-2"
+                    onClick={onCreateRoomClick}
+                >Criar Sala</Button>
             </section>
 
             <section
@@ -24,6 +72,8 @@ export const RoomsPage = () => {
             >
 
             </section>
+
+            <Loading loading={loading} isBlocker={true} text="Carregando Salas..." />
         </Layout>
     )
 }

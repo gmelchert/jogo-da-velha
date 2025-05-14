@@ -45,7 +45,7 @@ func FindRoom(r *models.PaginatedResponse, query *validator.FindRoomQuery) error
 	totalPages := math.Ceil(float64(totalRows) / float64(*query.Limit))
 	offset := int((page - 1) * (limit))
 
-	if err := tx.Offset(offset).Limit(int(limit)).Find(&rooms).Error; err != nil {
+	if err := tx.Offset(offset).Limit(int(limit)).Preload("Owner").Preload("Opponent").Find(&rooms).Error; err != nil {
 		return err
 	}
 
@@ -96,7 +96,7 @@ func DeleteRoom(roomID string) error {
 }
 
 func JoinRoom(roomID string, opponentID uint) error {
-	result := Db.Model(&models.Room{}).Where("room_id = ?", roomID).Updates(map[string]interface{}{"opponent_id": opponentID, "status": "RUNNING"})
+	result := Db.Model(&models.Room{}).Where("room_id = ? AND status = 'OPEN'", roomID).Updates(map[string]interface{}{"opponent_id": opponentID, "status": "RUNNING"})
 	if result.Error != nil {
 		return result.Error
 	}
@@ -106,8 +106,8 @@ func JoinRoom(roomID string, opponentID uint) error {
 	return nil
 }
 
-func CloseRoom(roomID string) error {
-	result := Db.Model(&models.Room{}).Where("room_id = ?", roomID).Updates(map[string]string{"status": "CLOSED"})
+func CloseRoom(roomID string, ownerID uint) error {
+	result := Db.Model(&models.Room{}).Where("room_id = ? AND owner_id = ?", roomID, ownerID).Updates(map[string]string{"status": "CLOSED"})
 	if result.Error != nil {
 		return result.Error
 	}

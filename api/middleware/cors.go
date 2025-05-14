@@ -7,16 +7,21 @@ import (
 )
 
 func CORSMiddleware() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		ctx.Header("Access-Control-Allow-Origin", "http://localhost:5173")
-		ctx.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-		ctx.Header("Access-Control-Allow-Headers", "Authorization, Content-Type")
-		ctx.Header("Access-Control-Allow-Credentials", "true")
+	return func(c *gin.Context) {
 
-		if ctx.Request.Method == http.MethodOptions {
-			ctx.Writer.WriteHeader(http.StatusNoContent)
+		// permite qualquer origem ou troque por http://localhost:5173 para restringir
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+
+		// se for uma requisição OPTIONS, apenas responde com 204 e para
+		if c.Request.Method == http.MethodOptions {
+			c.AbortWithStatus(http.StatusNoContent)
+			return
 		}
 
-		ctx.Next()
+		// segue normalmente para os handlers
+		c.Next()
 	}
 }

@@ -13,6 +13,7 @@ func initializeAuthRoutes(router *gin.Engine) {
 	public.POST("/register", handlers.SingUp)
 
 	auth := router.Group("/api/v1")
+
 	auth.Use(middleware.JWTMiddleware())
 	auth.GET("/me", handlers.Me)
 }

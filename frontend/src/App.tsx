@@ -14,7 +14,7 @@ export const App = () => {
 				<Route path="/" element={<HomePage />} />
 				<Route path="/Login" element={<LoginPage />} />
 				<Route path="/register" element={<RegisterPage />} />
-				<Route path="/game" element={<GamePage />} />
+				<Route path="/game/:roomId" element={<GamePage />} />
 				<Route path="/rooms" element={<RoomsPage />} />
 			</Routes>
 			<ToastContainer />

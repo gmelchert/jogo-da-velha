@@ -7,7 +7,7 @@ import (
 type FindRoomQuery struct {
 	RoomID     string   `form:"roomId"`
 	OwnerID    *uint    `form:"ownerId"`
-	OpponentID *uint    `form:"opponentID"`
+	OpponentID *uint    `form:"opponentId"`
 	Page       *float64 `form:"page"`
 	Limit      *float64 `form:"limit"`
 	Status     string   `json:"status"`

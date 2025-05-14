@@ -2,6 +2,7 @@ import { Bounce, toast, ToastOptions } from "react-toastify";
 
 export const notify = (
     message: string,
+    config?: ToastOptions<unknown>,
 ) => {
     const defaultToastCOnfig: ToastOptions<unknown> = {
         position: "top-right",
@@ -13,6 +14,7 @@ export const notify = (
         progress: undefined,
         theme: "dark",
         transition: Bounce,
+        ...config,
     }
 
     return {
