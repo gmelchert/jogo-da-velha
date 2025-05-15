@@ -1,7 +1,6 @@
 export * from './auth';
 export * from './user';
 export * from './rooms';
-export * from './stats';
 
 export interface IAPIResponse<D> {
     message: string;

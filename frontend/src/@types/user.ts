@@ -8,6 +8,10 @@ export interface IUser {
     DeletedAt: Date | null;
     email: string;
     password: string;
+    draws: number;
+    losses: number;
+    wins: number;
+    gamesPlayed: number;
 }
 
 export interface IAuthUser {
