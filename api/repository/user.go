@@ -33,9 +33,13 @@ func FindUserByUsername(username string) (models.User, error) {
 
 func CreateUser(req *validator.SignUpRequest) (models.User, error) {
 	user := models.User{
-		Username: req.Username,
-		Email:    req.Email,
-		Password: req.Password,
+		Username:    req.Username,
+		Email:       req.Email,
+		Password:    req.Password,
+		GamesPlayed: 0,
+		Wins:        0,
+		Losses:      0,
+		Draws:       0,
 	}
 
 	if err := Db.Create(&user).Error; err != nil {

@@ -8,9 +8,13 @@ import (
 
 type User struct {
 	gorm.Model
-	Username string `json:"username" gorm:"uniqueIndex"`
-	Email    string `json:"email" gorm:"uniqueIndex"`
-	Password string `json:"password"`
+	Username    string `json:"username" gorm:"uniqueIndex"`
+	Email       string `json:"email" gorm:"uniqueIndex"`
+	Password    string `json:"password"`
+	GamesPlayed uint   `json:"gamesPlayed" gorm:"default:0"`
+	Wins        uint   `json:"wins" gorm:"default:0"`
+	Losses      uint   `json:"losses" gorm:"default:0"`
+	Draws       uint   `json:"draws" gorm:"default:0"`
 }
 
 type UserResponse struct {
