@@ -6,7 +6,7 @@ import { useAuth } from "@/stores";
 import { ROOM_STATUS } from "@/enums";
 import { authValidator } from "@/utils";
 import { RoomsService } from "@/services";
-import { Button, Layout, Loading } from "@/components";
+import { Button, Layout, Loading, RoomCard } from "@/components";
 
 import { IRooms } from "@/@types";
 
@@ -28,6 +28,7 @@ export const RoomsPage = () => {
             });
             setRooms(data.rows);
         } catch (error) {
+            notify("Erro ao buscar salas.").error();
             console.error("Error fetching rooms:", error);
         } finally {
             setLoading(false);
@@ -68,9 +69,11 @@ export const RoomsPage = () => {
             </section>
 
             <section
-                className="grid-cols-3"
+                className="grid grid-cols-4 p-8"
             >
-
+                {rooms.map(r => (
+                    <RoomCard room={r} key={r.roomId} />
+                ))}
             </section>
 
             <Loading loading={loading} isBlocker={true} text="Carregando Salas..." />

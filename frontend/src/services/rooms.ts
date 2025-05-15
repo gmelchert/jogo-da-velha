@@ -9,16 +9,23 @@ import {
     IFindRoomQuery,
     IFindRoomResponse,
     ICreateRoomResponse,
+    IJoinRoomResponse,
 } from "@/@types";
 
 export class RoomsService {
+    private static readonly root = `/${API_V1_ROOT}/rooms`;
+
     public static async findRooms(query: IFindRoomQuery) {
         const queryUrl = queryParamBuilder(query);
-        return api<IFindRoomResponse>(`/${API_V1_ROOT}/rooms?${queryUrl}`).get();
+        return api<IFindRoomResponse>(`${this.root}?${queryUrl}`).get();
     }
 
     public static async createRoom() {
         const roomId = uuidv4();
-        return api<ICreateRoomResponse>(`/${API_V1_ROOT}/rooms`).post<ICreateRoom>({ roomId });
+        return api<ICreateRoomResponse>(this.root).post<ICreateRoom>({ roomId });
+    }
+
+    public static async joinRoom(roomId: string) {
+        return api<IJoinRoomResponse>(`${this.root}/${roomId}/join`).post();
     }
 }
